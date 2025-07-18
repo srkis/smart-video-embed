@@ -1,0 +1,412 @@
+/* style.css - Smart Video Embed */
+/* Ovde će biti stilovi za video prikaz i admin stranicu */ 
+
+/* Smart Video Embed - Custom Admin Styles */
+
+.sve-admin-main {
+    max-width: 1400px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+.sve-admin-main .card {
+    border-radius: 18px;
+    box-shadow: 0 4px 32px 0 rgba(0,0,0,0.07);
+    border: none;
+    background: #fff;
+}
+.sve-admin-main .card-header {
+    border-radius: 18px 18px 0 0;
+    font-weight: 600;
+    font-size: 1.35rem;
+    letter-spacing: 0.01em;
+    background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%);
+    color: #fff;
+    padding: 1.5rem 2rem;
+}
+.sve-admin-main .card-body {
+    padding: 2.5rem 2rem 2rem 2rem;
+}
+.sve-admin-main label.form-label {
+    font-size: 1.08rem;
+    margin-bottom: 0.4rem;
+}
+.sve-admin-main input.form-control, .sve-admin-main input[type="url"] {
+    border-radius: 10px;
+    font-size: 1.1rem;
+    padding: 0.7rem 1rem;
+    margin-bottom: 0.5rem;
+}
+.sve-admin-main .btn {
+    border-radius: 10px;
+    font-size: 1.1rem;
+    padding: 0.7rem 1.5rem;
+    min-width: 140px;
+}
+.sve-admin-main .btn-lg {
+    font-size: 1.18rem;
+    padding: 0.9rem 2.2rem;
+}
+.sve-admin-main .btn-outline-primary, .sve-admin-main .btn-outline-primary:focus {
+    background: #f8fafc;
+    color: #2563eb;
+    border: 1.5px solid #2563eb;
+}
+.sve-admin-main .btn-outline-primary.active, .sve-admin-main .btn-outline-primary:active {
+    background: #2563eb;
+    color: #fff;
+}
+.sve-admin-main .form-check-input:checked {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+.sve-admin-main .form-check-label {
+    font-size: 1.05rem;
+}
+.sve-admin-main .d-flex.gap-3 > * {
+    margin-right: 1.2rem;
+}
+.sve-admin-main .card.border-secondary {
+    border-radius: 14px;
+    border: 1.5px solid #e5e7eb;
+    margin-top: 1.5rem;
+}
+.sve-admin-main .card-header.bg-light, .sve-admin-main .card-header.preview-title {
+    background: #f8fafc;
+    border-radius: 14px 14px 0 0;
+    font-size: 1.08rem;
+    color: #111 !important;
+    font-weight: 700;
+}
+.sve-admin-main .preview-icon {
+    font-size: 48px;
+    display: block;
+    margin: 0 auto 24px auto;
+    margin-top: 0;
+}
+.sve-admin-main .preview-text {
+    color: #222;
+    font-size: 1.08rem;
+    margin-top: 12px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+.sve-admin-main .alert-info {
+    background: #f0f6ff;
+    color: #1e293b;
+    border-radius: 10px;
+    border: none;
+    font-size: 1.08rem;
+}
+.sve-admin-main .bg-light {
+    background: #f8fafc !important;
+}
+.sve-admin-main .rounded {
+    border-radius: 10px !important;
+}
+.sve-admin-main .form-text {
+    color: #64748b;
+    font-size: 0.98rem;
+}
+.sve-admin-main .btn-group .btn-sm {
+    font-size: 0.98rem;
+    padding: 0.35rem 1.1rem;
+    min-width: 70px;
+    height: 34px;
+    line-height: 1.1;
+}
+.sve-admin-main .btn-copy-shortcode,
+.sve-admin-main .btn-skip-preview {
+    font-size: 0.95rem;
+    padding: 0.25rem 0.9rem;
+    min-width: 60px;
+    height: 32px;
+    border-radius: 7px;
+}
+#sve-lottie-skip {
+    font-size: 0.95rem !important;
+    padding: 0.25rem 0.9rem !important;
+    min-width: 60px;
+    height: 32px;
+    border-radius: 7px;
+}
+.sve-admin-main .form-check.form-switch {
+    margin-bottom: 0.5em;
+    padding-left: 0;
+}
+.sve-admin-main .form-check-label {
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: #222;
+    margin-left: 0.5em;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+}
+.sve-custom-checkbox {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    vertical-align: middle;
+}
+.sve-custom-checkbox input[type="checkbox"] {
+    display: none;
+}
+.sve-checkmark {
+    position: absolute;
+    top: 0; left: 0;
+    width: 20px; height: 20px;
+    background: #f3f4f6;
+    border: 2px solid #2563eb;
+    border-radius: 5px;
+    transition: background 0.2s, border-color 0.2s;
+    box-sizing: border-box;
+}
+.sve-custom-checkbox input[type="checkbox"]:checked + .sve-checkmark {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+.sve-checkmark:after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    opacity: 0;
+    transform: scale(0.5) rotate(20deg);
+    transition: all 0.2s cubic-bezier(.4,2,.6,1);
+}
+.sve-custom-checkbox input[type="checkbox"]:checked + .sve-checkmark:after {
+    opacity: 1;
+    transform: scale(1) rotate(45deg);
+}
+@media (max-width: 900px) {
+    .sve-admin-main { max-width: 98vw; }
+    .sve-admin-main .card-body { padding: 1.2rem; }
+} 
+
+/* Frontend Modal Styles */
+
+/* Lottie overlay for thumbnail/video */
+.sve-lottie-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.82);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    flex-direction: column;
+}
+.sve-lottie-overlay .sve-lottie-skip-btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: rgba(255,255,255,0.18);
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    z-index: 11;
+    transition: background 0.2s;
+}
+.sve-lottie-overlay .sve-lottie-skip-btn:hover {
+    background: rgba(255,255,255,0.32);
+}
+
+/* Video.js Lottie skip button styles */
+.sve-videojs-lottie-skip {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ffc107;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #000;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    z-index: 11;
+}
+
+.sve-videojs-lottie-skip:hover {
+    background: #e0a800;
+    color: #000;
+}
+.sve-video-thumbnail { position: relative; }
+.sve-video-thumbnail .sve-lottie-overlay { pointer-events: auto; }
+
+/* Play overlay centering fix */
+.sve-play-overlay {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.65);
+    border-radius: 50%;
+    width: 80px; height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background 0.2s;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18);
+}
+.sve-video-thumbnail:hover .sve-play-overlay {
+    background: rgba(37,99,235,0.85);
+}
+.sve-play-overlay .dashicons-controls-play {
+    font-size: 38px;
+    color: #fff;
+    margin-left: 4px;
+    display: block;
+    line-height: 1;
+}
+
+/* Modal centering and overlay fix */
+.sve-modal-frontend {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0; top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+.sve-modal-frontend.active {
+    display: flex;
+    opacity: 1;
+}
+.sve-modal-content-frontend {
+    position: relative;
+    background: #000;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    width: 90vw;
+    max-width: 800px;
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: auto;
+}
+.sve-modal-content-frontend iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+    background: #000;
+}
+.sve-modal-close-frontend {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(255,255,255,0.18);
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+.sve-modal-close-frontend:hover {
+    background: rgba(255,255,255,0.32);
+}
+@media (max-width: 900px) {
+    .sve-video-thumbnail, .sve-modal-content-frontend {
+        max-width: 98vw;
+        border-radius: 7px;
+    }
+} 
+
+/* Frontend Video Thumbnail Styles */
+.sve-video-thumbnail {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16/9;
+    max-width: 800px;
+    width: 100%;
+    background: #000;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 32px 0 rgba(0,0,0,0.13);
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+}
+.sve-video-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.sve-video-thumbnail .sve-play-overlay {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.65);
+    border-radius: 50%;
+    width: 80px; height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background 0.2s;
+}
+.sve-video-thumbnail:hover .sve-play-overlay {
+    background: rgba(37,99,235,0.85);
+}
+.sve-video-thumbnail .dashicons-controls-play {
+    font-size: 38px;
+    color: #fff;
+    margin-left: 4px;
+}
+@media (max-width: 900px) {
+    .sve-video-thumbnail {
+        max-width: 98vw;
+        border-radius: 7px;
+    }
+} 
+
+/* Lottie overlay fix */
+.sve-lottie-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 10;
+  background: rgba(0,0,0,0.8);
+}
+.sve-lottie-overlay > div[id^='lottie-'] {
+  width: 200px;
+  height: 200px;
+  display: block;
+} 
+
+
+.vjs-poster img{
+    object-fit: cover !important;
+}

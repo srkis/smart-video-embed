@@ -147,6 +147,24 @@ $videojs_mute = ($params['mute'] ?? '') == '1';
                 Mute video on load (required for autoplay in some browsers)
             </label>
         </div>
+        <div class="mb-4">
+            <label class="fw-bold" style="display:flex;align-items:center;gap:0.7em;cursor:pointer;">
+                <span class="sve-custom-checkbox">
+                    <input type="checkbox" value="1" id="sve_videojs_hide_controls" name="sve_videojs_hide_controls" <?php if (!empty($params['hide_controls'])) echo 'checked'; ?> style="display:none;">
+                    <span class="sve-checkmark"></span>
+                </span>
+                Hide video controls (play, pause, etc.)
+            </label>
+        </div>
+        <div class="mb-4">
+            <label class="fw-bold" style="display:flex;align-items:center;gap:0.7em;cursor:pointer;">
+                <span class="sve-custom-checkbox">
+                    <input type="checkbox" value="1" id="sve_videojs_disable_related" name="sve_videojs_disable_related" <?php if (!empty($params['disable_related'])) echo 'checked'; ?> style="display:none;">
+                    <span class="sve-checkmark"></span>
+                </span>
+                Disable related videos (YouTube only)
+            </label>
+        </div>
         
         <p class="submit mb-0">
             <button type="submit" class="btn btn-success btn-lg px-4">Save Video.js Video</button>

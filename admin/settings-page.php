@@ -281,7 +281,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     autoplay: autoplay ? 1 : 0,
                     mute: mute ? 1 : 0,
                     aspect_ratio: (document.querySelector('input[name="sve_aspect_ratio"]:checked') || {value:'16:9'}).value,
-                    max_width: document.getElementById('sve_max_width')?.value || '800px'
+                    max_width: document.getElementById('sve_max_width')?.value || '800px',
+                    show_controls: document.getElementById('sve_show_controls')?.checked ? 1 : 0,
+                    disable_related: document.getElementById('sve_disable_related')?.checked ? 1 : 0
                 })
             };
             fetch(ajaxurl, {

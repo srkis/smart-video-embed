@@ -208,6 +208,8 @@ class SVE_Video_Embed_Manager {
                 $new_mute = !empty($_POST['sve_videojs_mute']) ? '1' : '0';
                 $new_aspect_ratio = sanitize_text_field($_POST['sve_videojs_aspect_ratio'] ?? '16:9');
                 $new_max_width = sanitize_text_field($_POST['sve_videojs_max_width'] ?? '800px');
+                $new_hide_controls = !empty($_POST['sve_videojs_hide_controls']) ? '1' : '0';
+                $new_disable_related = !empty($_POST['sve_videojs_disable_related']) ? '1' : '0';
                 
                 if (!$new_url) {
                     echo '<div class="notice notice-error"><p>Video URL is required.</p></div>';
@@ -225,6 +227,8 @@ class SVE_Video_Embed_Manager {
                     if ($new_mute === '1') $new_shortcode .= ' mute="1"';
                     if ($new_aspect_ratio) $new_shortcode .= ' aspect_ratio="' . $new_aspect_ratio . '"';
                     if ($new_max_width) $new_shortcode .= ' max_width="' . $new_max_width . '"';
+                    if ($new_hide_controls === '1') $new_shortcode .= ' hide_controls="1"';
+                    if ($new_disable_related === '1') $new_shortcode .= ' disable_related="1"';
                     $new_shortcode .= ']';
                     
 
@@ -245,7 +249,9 @@ class SVE_Video_Embed_Manager {
                                 'autoplay' => $new_autoplay,
                                 'mute' => $new_mute,
                                 'aspect_ratio' => $new_aspect_ratio,
-                                'max_width' => $new_max_width
+                                'max_width' => $new_max_width,
+                                'hide_controls' => $new_hide_controls,
+                                'disable_related' => $new_disable_related
                             ])
                         ],
                         [ 'id' => $id ]
@@ -273,6 +279,8 @@ class SVE_Video_Embed_Manager {
                 $new_mute = !empty($_POST['sve_mute']) ? '1' : '0';
                 $new_aspect_ratio = sanitize_text_field($_POST['sve_aspect_ratio'] ?? '16:9');
                 $new_max_width = sanitize_text_field($_POST['sve_max_width'] ?? '800px');
+                $new_show_controls = !empty($_POST['sve_show_controls']) ? '1' : '0';
+                $new_disable_related = !empty($_POST['sve_disable_related']) ? '1' : '0';
                 if (!$new_url) {
                     echo '<div class="notice notice-error"><p>Video URL is required.</p></div>';
                 } else {
@@ -288,6 +296,8 @@ class SVE_Video_Embed_Manager {
                     if ($new_mute === '1') $new_shortcode .= ' mute="1"';
                     if ($new_aspect_ratio) $new_shortcode .= ' aspect_ratio="' . $new_aspect_ratio . '"';
                     if ($new_max_width) $new_shortcode .= ' max_width="' . $new_max_width . '"';
+                    $new_shortcode .= ' show_controls="' . $new_show_controls . '"';
+                    $new_shortcode .= ' disable_related="' . $new_disable_related . '"';
                     $new_shortcode .= ']';
                     $updated = $wpdb->update(
                         $table_name,
@@ -304,7 +314,9 @@ class SVE_Video_Embed_Manager {
                                 'autoplay' => $new_autoplay,
                                 'mute' => $new_mute,
                                 'aspect_ratio' => $new_aspect_ratio,
-                                'max_width' => $new_max_width
+                                'max_width' => $new_max_width,
+                                'show_controls' => $new_show_controls,
+                                'disable_related' => $new_disable_related
                             ])
                         ],
                         [ 'id' => $id ]
@@ -339,6 +351,8 @@ class SVE_Video_Embed_Manager {
                 'mute' => ($params['mute'] ?? '') == '1',
                 'aspect_ratio' => $params['aspect_ratio'] ?? '16:9',
                 'max_width' => $params['max_width'] ?? '800px',
+                'show_controls' => ($params['show_controls'] ?? '') == '1',
+                'disable_related' => ($params['disable_related'] ?? '') == '1',
                 'nonce_action' => 'sve_edit_video_' . $id,
                 'video_id' => $id,
                 'cancel_url' => admin_url('admin.php?page=sve-videos'),

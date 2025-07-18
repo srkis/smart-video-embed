@@ -239,6 +239,24 @@ class SVE_VideoJS_Manager {
                                     <input type="text" class="form-control" id="sve_videojs_max_width" name="sve_videojs_max_width" placeholder="e.g. 800px or 100%" value="800px">
                                     <div class="form-text">Set the maximum width for the Video.js player (px or %)</div>
                                 </div>
+                                <div class="mb-4">
+                                    <label class="fw-bold" style="display:flex;align-items:center;gap:0.7em;cursor:pointer;">
+                                        <span class="sve-custom-checkbox">
+                                            <input type="checkbox" value="1" id="sve_videojs_hide_controls" name="sve_videojs_hide_controls" style="display:none;">
+                                            <span class="sve-checkmark"></span>
+                                        </span>
+                                        Hide video controls (play, pause, etc.)
+                                    </label>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="fw-bold" style="display:flex;align-items:center;gap:0.7em;cursor:pointer;">
+                                        <span class="sve-custom-checkbox">
+                                            <input type="checkbox" value="1" id="sve_videojs_disable_related" name="sve_videojs_disable_related" style="display:none;">
+                                            <span class="sve-checkmark"></span>
+                                        </span>
+                                        Disable related videos (YouTube only)
+                                    </label>
+                                </div>
                                 <p class="submit mb-0">
                                     <button type="button" class="btn btn-primary btn-sm px-4" id="sve-videojs-preview-btn">
                                         <i class="dashicons dashicons-visibility me-1"></i>

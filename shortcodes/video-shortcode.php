@@ -24,7 +24,10 @@ function smart_video_embed_shortcode($atts) {
         'type' => '',
         'theme' => '',
         'aspect_ratio' => '16:9',
-        'max_width' => '800px'
+        'max_width' => '800px',
+        'show_controls' => '1',
+        'disable_related' => '0',
+        'hide_controls' => '0'
     ), array_merge($db_params, $atts));
 
     if (empty($atts['url'])) {
@@ -41,6 +44,9 @@ function smart_video_embed_shortcode($atts) {
     $mute = !empty($atts['mute']) && $atts['mute'] != '0' && $atts['mute'] !== false;
     $theme = !empty($atts['theme']) ? sanitize_text_field($atts['theme']) : '';
     $is_videojs = ($atts['type'] === 'videojs' || $theme);
+    $show_controls = !empty($atts['show_controls']) && $atts['show_controls'] == '1';
+    $disable_related = !empty($atts['disable_related']) && $atts['disable_related'] == '1';
+    $hide_controls = !empty($atts['hide_controls']) && $atts['hide_controls'] == '1';
 
     // Generate unique ID for this video instance
     $video_id = 'sve-video-' . uniqid();
@@ -52,9 +58,37 @@ function smart_video_embed_shortcode($atts) {
         ob_start();
         ?>
         <div class="sve-videojs-container" id="<?php echo $video_id; ?>" style="max-width:<?php echo esc_attr($max_width); ?>;margin:auto;position:relative;">
-            <video id="videojs-<?php echo $video_id; ?>" class="video-js vjs-big-play-centered<?php echo $theme ? ' vjs-theme-' . esc_attr($theme) : ''; ?>" controls preload="auto" style="width:100%;" poster="<?php echo esc_attr($thumbnail_url); ?>">
+
+            <video id="videojs-<?php echo $video_id; ?>" class="video-js vjs-big-play-centered<?php echo $theme ? ' vjs-theme-' . esc_attr($theme) : ''; ?>" preload="auto" style="width:100%;" poster="<?php echo esc_attr($thumbnail_url); ?>">
                 <?php if (preg_match('/(youtube\.com|youtu\.be)/i', $video_url)): ?>
+                    <?php
+                    // Izvuci video ID iz URL-a
+                    $video_id_match = [];
+                    if (preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\?\n]+)/', $video_url, $video_id_match)) {
+                        $youtube_video_id = $video_id_match[1];
+                        // Koristi nocookie domen
+                        $video_url = 'https://www.youtube-nocookie.com/embed/' . $youtube_video_id;
+                    }
+
+                    // Modifikuj YouTube URL da uključi sve potrebne parametre
+                    $youtube_params = [];
+                    if ($disable_related) {
+                        $youtube_params[] = 'rel=0';
+                        $youtube_params[] = 'showinfo=0';
+                        $youtube_params[] = 'iv_load_policy=3';
+                        $youtube_params[] = 'modestbranding=1';
+                        $youtube_params[] = 'origin=' . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'];
+                    }
+                    if ($hide_controls) {
+                        $youtube_params[] = 'controls=0';
+                    }
+                    $youtube_params[] = 'enablejsapi=1';
+                    
+                    // Dodaj parametre u URL
+                    $video_url .= (strpos($video_url, '?') === false ? '?' : '&') . implode('&', $youtube_params);
+                    ?>
                     <source src="<?php echo esc_url($video_url); ?>" type="video/youtube">
+
                 <?php elseif (preg_match('/vimeo\.com/i', $video_url)): ?>
                     <source src="<?php echo esc_url($video_url); ?>" type="video/vimeo">
                 <?php else: ?>
@@ -75,12 +109,39 @@ function smart_video_embed_shortcode($atts) {
             var player = window.videojs && window.videojs('videojs-<?php echo $video_id; ?>', {
                 techOrder: ['youtube', 'vimeo', 'html5'],
                 controls: true,
+                bigPlayButton: true,
+                controlBar: {
+                    playToggle: true,
+                    currentTimeDisplay: <?php echo $hide_controls ? 'false' : 'true'; ?>,
+                    timeDivider: <?php echo $hide_controls ? 'false' : 'true'; ?>,
+                    durationDisplay: <?php echo $hide_controls ? 'false' : 'true'; ?>,
+                    remainingTimeDisplay: <?php echo $hide_controls ? 'false' : 'true'; ?>,
+                    progressControl: <?php echo $hide_controls ? 'false' : 'true'; ?>,
+                    volumePanel: <?php echo $hide_controls ? 'false' : 'true'; ?>,
+                    fullscreenToggle: <?php echo $hide_controls ? 'false' : 'true'; ?>,
+                    pictureInPictureToggle: <?php echo $hide_controls ? 'false' : 'true'; ?>
+                },
                 preload: 'auto',
                 fluid: true,
                 aspectRatio: <?php echo json_encode($aspect_ratio); ?>,
                 autoplay: <?php echo $autoplay ? 'true' : 'false'; ?>,
-                muted: <?php echo $mute ? 'true' : 'false'; ?>
+                muted: <?php echo $mute ? 'true' : 'false'; ?>,
+                youtube: {
+                    ytControls: 0,
+                    modestbranding: 1,
+                    iv_load_policy: 3,
+                    playsinline: 1,
+                    <?php if ($disable_related): ?>
+                    playerVars: {
+                        rel: 0,
+                        showinfo: 0,
+                        modestbranding: 1,
+                        iv_load_policy: 3
+                    }
+                    <?php endif; ?>
+                }
             });
+
             // Theme switch (enable only selected theme)
             var theme = <?php echo json_encode($theme); ?>;
             var themeIds = ['city','fantasy','forest','sea','classic'];
@@ -151,6 +212,12 @@ function smart_video_embed_shortcode($atts) {
         if ($mute) {
             $youtube_params[] = 'mute=1';
         }
+        if ($disable_related) {
+            $youtube_params[] = 'rel=0';
+        }
+        if (!$show_controls) {
+            $youtube_params[] = 'controls=0';
+        }
         if (!empty($youtube_params)) {
             $embed_url .= '?' . implode('&', $youtube_params);
         }
@@ -176,7 +243,13 @@ function smart_video_embed_shortcode($atts) {
         <div class="sve-video-inner" style="position:relative;max-width:<?php echo esc_attr($max_width); ?>;margin:auto;">
             <!-- Video element - uvek prikazan, sa Lottie overlay-om ako postoji -->
             <div class="sve-video-iframe" id="video-<?php echo $video_id; ?>" style="aspect-ratio:<?php echo $aspect_css; ?>;border-radius:12px;overflow:hidden;">
+                <?php if ($is_youtube): ?>
+                <iframe src="<?php echo $embed_url; ?>" frameborder="0" allowfullscreen style="width:100%;height:100%;border-radius:12px;"<?php if (!$show_controls) echo ' allow="autoplay"'; ?>></iframe>
+                <?php elseif (preg_match('/\.mp4$/i', $video_url)): ?>
+                <video src="<?php echo $embed_url; ?>" style="width:100%;height:100%;border-radius:12px;"<?php if (!$show_controls) echo ' controls="false"'; else echo ' controls'; ?>></video>
+                <?php else: ?>
                 <iframe src="<?php echo $embed_url; ?>" frameborder="0" allowfullscreen style="width:100%;height:100%;border-radius:12px;"></iframe>
+                <?php endif; ?>
             </div>
             
             <!-- Thumbnail - prikazuje se nakon Lottie animacije -->
@@ -191,7 +264,7 @@ function smart_video_embed_shortcode($atts) {
                     </div>
                 <?php endif; ?>
                 <div class="sve-play-overlay" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.7);border-radius:50%;width:80px;height:80px;display:flex;align-items:center;justify-content:center;">
-                    <span class="dashicons dashicons-controls-play" style="color:white;font-size:32px;margin-left:4px;"></span>
+                    <span class="dashicons dashicons-controls-play" style="color:white;font-size:32px;margin-right:8px;margin-bottom:5px;"></span>
                 </div>
             </div>
             <?php endif; ?>

@@ -79,6 +79,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('sve_videojs_modal').checked;
             const autoplay = document.getElementById('sve_videojs_autoplay').checked;
             const mute = document.getElementById('sve_videojs_mute').checked;
+            const hideControls = document.getElementById('sve_videojs_hide_controls')?.checked ? 1 : 0;
+            const disableRelated = document.getElementById('sve_videojs_disable_related')?.checked ? 1 : 0;
             const preview = document.getElementById('sve-videojs-preview');
 
             // Hard reset: potpuno brišem preview sadržaj pre učitavanja CSS-a
@@ -183,55 +185,66 @@ document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('sve_videojs_modal').checked;
             const autoplay = document.getElementById('sve_videojs_autoplay').checked;
             const mute = document.getElementById('sve_videojs_mute').checked;
+            const hideControls = document.getElementById('sve_videojs_hide_controls')?.checked ? 1 : 0;
+            const disableRelated = document.getElementById('sve_videojs_disable_related')?.checked ? 1 : 0;
             // Use the entered title or default to 'Video.js'
             let videoTitle = title || 'Video.js';
-            let shortcode = '[smart_video_embed type="videojs"';
-            if (url) shortcode += ' url="' + url + '"';
-            if (thumbnail) shortcode += ' thumbnail="' + thumbnail + '"';
-            if (lottie) shortcode += ' lottie="' + lottie + '"';
-            if (theme) shortcode += ' theme="' + theme + '"';
-            if (skip) shortcode += ' skip_button="1"';
-            if (lazy) shortcode += ' lazy_load="1"';
-            if (modal) shortcode += ' modal="1"';
-            if (autoplay) shortcode += ' autoplay="1"';
-            if (mute) shortcode += ' mute="1"';
-            shortcode += ']';
+            
+            // Generisi pun shortcode za bazu
+            let fullShortcode = '[smart_video_embed type="videojs"';
+            if (url) fullShortcode += ' url="' + url + '"';
+            if (thumbnail) fullShortcode += ' thumbnail="' + thumbnail + '"';
+            if (lottie) fullShortcode += ' lottie="' + lottie + '"';
+            if (theme) fullShortcode += ' theme="' + theme + '"';
+            if (skip) fullShortcode += ' skip_button="1"';
+            if (lazy) fullShortcode += ' lazy_load="1"';
+            if (modal) fullShortcode += ' modal="1"';
+            if (autoplay) fullShortcode += ' autoplay="1"';
+            if (mute) fullShortcode += ' mute="1"';
+            if (hideControls) fullShortcode += ' hide_controls="1"';
+            if (disableRelated) fullShortcode += ' disable_related="1"';
+            fullShortcode += ']';
 
             // Prikaz rezultata odmah (dok ne stigne AJAX)
             var resultBox = document.getElementById('sve-videojs-shortcode-result');
             var codeBox = document.getElementById('sve-videojs-shortcode-text');
             if (resultBox && codeBox) {
-                codeBox.textContent = shortcode;
+                codeBox.textContent = fullShortcode; // Privremeno prikaži pun shortcode
                 resultBox.classList.remove('d-none');
             }
 
-            // AJAX upis u bazu (kao na settings page-u)
+            // AJAX upis u bazu
             if (typeof sveUpload !== 'undefined') {
-                const params = {
-                    url: url,
-                    thumbnail: thumbnail,
-                    lottie: lottie,
-                    theme: theme,
-                    skip_button: skip ? 1 : 0,
-                    lazy_load: lazy ? 1 : 0,
-                    modal: modal ? 1 : 0,
-                    autoplay: autoplay ? 1 : 0,
-                    mute: mute ? 1 : 0
+                var data = {
+                    action: 'sve_save_video',
+                    nonce: (typeof sveUpload !== 'undefined') ? sveUpload.nonce : '',
+                    title: videoTitle,
+                    shortcode: fullShortcode, // Šaljemo pun shortcode u bazu
+                    params: JSON.stringify({
+                        url: url,
+                        thumbnail: thumbnail,
+                        lottie: lottie,
+                        theme: theme,
+                        skip_button: skip ? 1 : 0,
+                        lazy_load: lazy ? 1 : 0,
+                        modal: modal ? 1 : 0,
+                        autoplay: autoplay ? 1 : 0,
+                        mute: mute ? 1 : 0,
+                        aspect_ratio: document.querySelector('input[name="sve_videojs_aspect_ratio"]:checked')?.value || '16:9',
+                        max_width: document.getElementById('sve_videojs_max_width')?.value || '800px',
+                        hide_controls: hideControls,
+                        disable_related: disableRelated
+                    })
                 };
-                const data = new FormData();
-                data.append('action', 'sve_save_video');
-                data.append('nonce', sveUpload.nonce);
-                data.append('title', videoTitle); // Use entered title
-                data.append('shortcode', shortcode);
-                data.append('params', JSON.stringify(params));
-                fetch(sveUpload.ajaxurl, {
+                const fetchUrl = sveUpload.ajaxurl;
+                fetch(fetchUrl, {
                     method: 'POST',
-                    body: data
+                    body: new URLSearchParams(Object.entries(data))
                 })
                 .then(r => r.json())
                 .then(resp => {
                     if (resp.success && resp.data && resp.data.id) {
-                        // Prikaz preporučenog shortcode-a sa ID-em
+                        // Prikaz ID shortcode-a korisniku
                         if (codeBox && resultBox) {
                             codeBox.textContent = '[smart_video_embed id="' + resp.data.id + '"]';
                             resultBox.classList.remove('d-none');
@@ -239,16 +252,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             var heading = resultBox.querySelector('h6');
                             if (heading) heading.innerHTML = '<i class="dashicons dashicons-shortcode me-1"></i> Recommended Shortcode (auto-updates everywhere)';
                         }
-                        // (Opcionalno) AJAX update shortcode sa ID-em u bazi
-                        const updateData = new FormData();
-                        updateData.append('action', 'sve_update_shortcode');
-                        updateData.append('nonce', sveUpload.nonce);
-                        updateData.append('id', resp.data.id);
-                        updateData.append('shortcode', '[smart_video_embed id="' + resp.data.id + '"]');
-                        fetch(sveUpload.ajaxurl, {
-                            method: 'POST',
-                            body: updateData
-                        });
                     }
                 });
             }

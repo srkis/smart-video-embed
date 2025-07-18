@@ -1,5 +1,5 @@
 /* style.css - Smart Video Embed */
-/* Ovde će biti stilovi za video prikaz i admin stranicu */ 
+/* Ovde će biti stilovi za video prikaz i admin stranicu */
 
 /* Smart Video Embed - Custom Admin Styles */
 
@@ -188,7 +188,7 @@
 @media (max-width: 900px) {
     .sve-admin-main { max-width: 98vw; }
     .sve-admin-main .card-body { padding: 1.2rem; }
-} 
+}
 
 /* Frontend Modal Styles */
 
@@ -338,7 +338,7 @@
         max-width: 98vw;
         border-radius: 7px;
     }
-} 
+}
 
 /* Frontend Video Thumbnail Styles */
 .sve-video-thumbnail {
@@ -388,7 +388,7 @@
         max-width: 98vw;
         border-radius: 7px;
     }
-} 
+}
 
 /* Lottie overlay fix */
 .sve-lottie-overlay {
@@ -404,7 +404,7 @@
   width: 200px;
   height: 200px;
   display: block;
-} 
+}
 
 
 .vjs-poster img{

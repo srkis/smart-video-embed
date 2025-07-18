@@ -70,6 +70,17 @@ document.addEventListener('DOMContentLoaded', function() {
             shortcode += ' max_width="' + maxWidth.value + '"';
         }
         
+        // Dodaj show_controls
+        const showControls = document.getElementById('sve_show_controls');
+        if (showControls && showControls.checked) {
+            shortcode += ' show_controls="1"';
+        }
+        // Dodaj disable_related
+        const disableRelated = document.getElementById('sve_disable_related');
+        if (disableRelated && disableRelated.checked) {
+            shortcode += ' disable_related="1"';
+        }
+        
         // Dodaj modal parametar
         const modalCheckbox = document.getElementById('sve_modal');
         if (modalCheckbox && modalCheckbox.checked) {
@@ -347,7 +358,9 @@ document.addEventListener('DOMContentLoaded', function() {
             autoplay: document.getElementById('sve_autoplay')?.checked ? '1' : '0',
             mute: document.getElementById('sve_mute')?.checked ? '1' : '0',
             aspect_ratio: document.querySelector('input[name="sve_aspect_ratio"]:checked')?.value || '16:9',
-            max_width: document.getElementById('sve_max_width')?.value || '800px'
+            max_width: document.getElementById('sve_max_width')?.value || '800px',
+            show_controls: document.getElementById('sve_show_controls')?.checked ? '1' : '0',
+            disable_related: document.getElementById('sve_disable_related')?.checked ? '1' : '0'
         };
         console.log('SVE params for AJAX:', params);
         const data = new FormData();
